@@ -2,6 +2,7 @@ package vista;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import javax.swing.JComboBox;
@@ -16,12 +17,9 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
-import modelo.Alumno;
-import modelo.ComparadorInicioAlumnos;
 import modelo.ComparadorInicioPrestamos;
 import modelo.Devoluciones;
 import modelo.Prestamo;
-import modelo.Prestamos;
 
 public class PanelBusquedaDevoluciones extends JPanel {
 
@@ -147,30 +145,46 @@ public class PanelBusquedaDevoluciones extends JPanel {
 
 	public void agregarPrestamos(List<Prestamo> lista) {
 		for (int i = 0; i < lista.size(); i++) {
-			Object[] linea = new Object[6];
+			Object[] linea = new Object[7];
 			Prestamo a = lista.get(i);
 			linea[0] = a.getAlumno().getNoControl();
 			linea[1] = a.getAlumno().getNombreCompleto();
 			linea[2] = a.getLibro().getIsbn();
 			linea[3] = a.getLibro().getTitulo();
 			linea[4] = a.getFechaDePrestamo().toString();
-			linea[5] = a.getFechaDeEntrega().toString();
+			linea[5] = ChronoUnit.DAYS.between(a.getFechaDePrestamo(), a.getFechaDeEntrega());
+			linea[6] = a.getFechaDeEntrega().toString();
 			modeloTabla.addRow(linea);
 		}
+		TableColumn columna = table.getColumnModel().getColumn(5);// selecciono la columna que me interesa de la tabla
+		EditorCeldas TableCellRenderer = new EditorCeldas();
+		TableCellRenderer.setColumns(5); // se le da por parametro la columna que se quiere modificar
+		// TableCellRenderer.setRow(Row);// se le da por parametro la fila que se quiere
+		// modificar
+		columna.setCellRenderer(TableCellRenderer); // le aplico la edicion
+
 	}
 
 	public void agregarPrestamos(Prestamo[] lista) {
 		for (int i = 0; i < lista.length; i++) {
-			Object[] linea = new Object[6];
+			Object[] linea = new Object[7];
 			Prestamo a = lista[i];
 			linea[0] = a.getAlumno().getNoControl();
 			linea[1] = a.getAlumno().getNombreCompleto();
 			linea[2] = a.getLibro().getIsbn();
 			linea[3] = a.getLibro().getTitulo();
 			linea[4] = a.getFechaDePrestamo().toString();
-			linea[5] = a.getFechaDeEntrega().toString();
+			linea[5] = ChronoUnit.DAYS.between(a.getFechaDePrestamo(), a.getFechaDeEntrega());
+			linea[6] = a.getFechaDeEntrega().toString();
 			modeloTabla.addRow(linea);
 		}
+		TableColumn columna = table.getColumnModel().getColumn(1);// selecciono la columna que me interesa de la tabla
+		EditorCeldas TableCellRenderer = new EditorCeldas();
+		TableCellRenderer.setColumns(5); // se le da por parametro la columna que se quiere modificar
+		// TableCellRenderer.setRow(Row);// se le da por parametro la fila que se quiere
+		// modificar
+		columna.setCellRenderer(TableCellRenderer); // le aplico la edicion
+
 	}
 
 	public void pedirFoco() {

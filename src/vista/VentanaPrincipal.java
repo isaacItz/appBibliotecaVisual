@@ -377,7 +377,8 @@ public class VentanaPrincipal extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
 				pBD = new PanelBusquedaDevoluciones(devoluciones, new String[] { "Numero de Control", "Nombre", "Isbn",
-						"Titulo", "Fecha de salida", "Fecha de Devuelto" }, ComparadorInicioPrestamos.getCriterios());
+						"Titulo", "Fecha de salida", "Dias de Prestamo", "Fecha de Devuelto" },
+						ComparadorInicioPrestamos.getCriterios());
 				contentPane.removeAll();
 				actualizarTablaD();
 				contentPane.add(pBD);
