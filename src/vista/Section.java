@@ -126,7 +126,6 @@ public class Section extends JPanel {
 				a.setSemestre(Integer.parseInt(comboBoxSemestre.getSelectedItem().toString()));
 
 				grupo.agregar(a);
-				System.out.println(grupo.listar());
 
 				editNoControl.setText(null);
 				editNombre.setText(null);

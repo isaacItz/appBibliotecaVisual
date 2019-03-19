@@ -2,8 +2,12 @@ package vista;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
 import java.util.List;
 
+import javax.swing.AbstractAction;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -99,9 +103,22 @@ public class PanelBusquedaAlumnos extends JPanel {
 		JLabel lblTablaDeAlumnos = new JLabel("Tabla de Alumnos");
 		panel_3.add(lblTablaDeAlumnos);
 
-		modeloTabla = new DefaultTableModel();
+		modeloTabla = new DefaultTableModel() {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
 		table = new JTable(modeloTabla);
-
+		table.getActionMap().put("copy", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String cellValue = table.getModel().getValueAt(table.getSelectedRow(), table.getSelectedColumn())
+						.toString();
+				StringSelection stringSelection = new StringSelection(cellValue);
+				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, stringSelection);
+			}
+		});
 		JScrollPane scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);

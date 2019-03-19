@@ -2,9 +2,13 @@ package vista;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import javax.swing.AbstractAction;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -17,6 +21,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+import Atxy2k.CustomTextField.RestrictedTextField;
 import modelo.ComparadorInicioPrestamos;
 import modelo.Devoluciones;
 import modelo.Prestamo;
@@ -57,6 +62,9 @@ public class PanelBusquedaDevoluciones extends JPanel {
 		panel_1.add(comboBox);
 
 		textField = new JTextField();
+		RestrictedTextField restricted = new RestrictedTextField(textField);
+		restricted.setLimit(8);
+		restricted.setOnlyNums(true);
 		panel_1.add(textField);
 		textField.setColumns(10);
 		textField.getDocument().addDocumentListener(new DocumentListener() {
@@ -99,9 +107,22 @@ public class PanelBusquedaDevoluciones extends JPanel {
 		JLabel lblTablaDeAlumnos = new JLabel("Tabla de Devoluciones");
 		panel_3.add(lblTablaDeAlumnos);
 
-		modeloTabla = new DefaultTableModel();
+		modeloTabla = new DefaultTableModel() {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
 		table = new JTable(modeloTabla);
-
+		table.getActionMap().put("copy", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String cellValue = table.getModel().getValueAt(table.getSelectedRow(), table.getSelectedColumn())
+						.toString();
+				StringSelection stringSelection = new StringSelection(cellValue);
+				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, stringSelection);
+			}
+		});
 		JScrollPane scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		panel_2.add(scrollPane, BorderLayout.CENTER);
@@ -156,12 +177,10 @@ public class PanelBusquedaDevoluciones extends JPanel {
 			linea[6] = a.getFechaDeEntrega().toString();
 			modeloTabla.addRow(linea);
 		}
-		TableColumn columna = table.getColumnModel().getColumn(5);// selecciono la columna que me interesa de la tabla
+		TableColumn columna = table.getColumnModel().getColumn(5);
 		EditorCeldas TableCellRenderer = new EditorCeldas();
-		TableCellRenderer.setColumns(5); // se le da por parametro la columna que se quiere modificar
-		// TableCellRenderer.setRow(Row);// se le da por parametro la fila que se quiere
-		// modificar
-		columna.setCellRenderer(TableCellRenderer); // le aplico la edicion
+		TableCellRenderer.setColumns(5);
+		columna.setCellRenderer(TableCellRenderer);
 
 	}
 
@@ -174,11 +193,11 @@ public class PanelBusquedaDevoluciones extends JPanel {
 			linea[2] = a.getLibro().getIsbn();
 			linea[3] = a.getLibro().getTitulo();
 			linea[4] = a.getFechaDePrestamo().toString();
-			linea[5] = ChronoUnit.DAYS.between(a.getFechaDePrestamo(), a.getFechaDeEntrega());
+			linea[5] = ChronoUnit.DAYS.between(a.getFechaDePrestamo(), a.getFechaDeEntrega()) + 1;
 			linea[6] = a.getFechaDeEntrega().toString();
 			modeloTabla.addRow(linea);
 		}
-		TableColumn columna = table.getColumnModel().getColumn(1);// selecciono la columna que me interesa de la tabla
+		TableColumn columna = table.getColumnModel().getColumn(5);// selecciono la columna que me interesa de la tabla
 		EditorCeldas TableCellRenderer = new EditorCeldas();
 		TableCellRenderer.setColumns(5); // se le da por parametro la columna que se quiere modificar
 		// TableCellRenderer.setRow(Row);// se le da por parametro la fila que se quiere

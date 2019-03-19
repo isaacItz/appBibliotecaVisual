@@ -41,7 +41,7 @@ public class PanelPrestamos extends JPanel {
 	private JLabel labelCarrera;
 	private JLabel labelPais;
 	private JLabel labelIdioma;
-	private JLabel labelA�oEdicion;
+	private JLabel labelAñoEdicion;
 	private JLabel labelNoEdicion;
 	private JLabel labelEditorial;
 	private JLabel labelAutor;
@@ -118,8 +118,8 @@ public class PanelPrestamos extends JPanel {
 		JLabel lblAoDeEdicion = new JLabel("A\u00F1o de Edicion");
 		panel_3.add(lblAoDeEdicion);
 
-		labelA�oEdicion = new JLabel("");
-		panel_3.add(labelA�oEdicion);
+		labelAñoEdicion = new JLabel("");
+		panel_3.add(labelAñoEdicion);
 
 		JLabel lblIdioma = new JLabel("Idioma:");
 		panel_3.add(lblIdioma);
@@ -197,7 +197,9 @@ public class PanelPrestamos extends JPanel {
 		btnCancelar = new JButton("Cancelar");
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
+				limpiarCamposAlumno();
+				textFieldNumControl.setText("");
+				limpiarCamposLibro();
 			}
 		});
 		panel_4.add(btnCancelar);
@@ -239,6 +241,8 @@ public class PanelPrestamos extends JPanel {
 					labelSemestre.setText(String.valueOf(a.getSemestre()));
 					labelCarrera.setText(a.getCarrera());
 				}
+			} else {
+				limpiarCamposAlumno();
 			}
 		}
 
@@ -272,12 +276,21 @@ public class PanelPrestamos extends JPanel {
 					labelTitulo.setText(l.getTitulo());
 					labelIsbn.setText(l.getIsbn());
 					labelAutor.setText(l.getAutor());
-					labelA�oEdicion.setText(l.getAnioEdicion());
+					labelAñoEdicion.setText(l.getAnioEdicion());
 					labelEditorial.setText(l.getEditoria());
 					labelIdioma.setText(l.getIdioma());
 					labelPais.setText(l.getPais());
 					labelNoEdicion.setText(l.getNumeroEdicion());
 				}
+			} else {
+				labelTitulo.setText("");
+				labelIsbn.setText("");
+				labelAutor.setText("");
+				labelAñoEdicion.setText("");
+				labelEditorial.setText("");
+				labelIdioma.setText("");
+				labelPais.setText("");
+				labelNoEdicion.setText("");
 			}
 		}
 
@@ -288,11 +301,21 @@ public class PanelPrestamos extends JPanel {
 		labelTitulo.setText("");
 		labelIsbn.setText("");
 		labelAutor.setText("");
-		labelA�oEdicion.setText("");
+		labelAñoEdicion.setText("");
 		labelEditorial.setText("");
 		labelIdioma.setText("");
 		labelPais.setText("");
 		labelNoEdicion.setText("");
+
+	}
+
+	public void limpiarCamposAlumno() {
+		labelSemestre.setText("");
+		labelCarrera.setText("");
+		labelEdad.setText("");
+		labelGenero.setText("");
+		labelNombreA.setText("");
+		labelNumeroCA.setText("");
 
 	}
 

@@ -4,5 +4,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="utilierias/UtileriaF.jar"/>
 	<classpathentry kind="lib" path="utilierias/jcalendar-1.4.jar"/>
+	<classpathentry kind="lib" path="utilierias/Atxy2k.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
