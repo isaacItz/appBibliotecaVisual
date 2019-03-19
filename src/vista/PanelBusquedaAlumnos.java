@@ -129,20 +129,33 @@ public class PanelBusquedaAlumnos extends JPanel {
 		if (titulos != null) {
 			setTitulos(titulos);
 		}
+		agregarAlumnos(gru.getList());
 		setCriterio(crterios);
-		setEspacioRegistros();
+		setEspacioRegistrosop2();
 
 	}
 
-	private void setEspacioRegistros() {
+	private void setEspacioRegistrosop2() {
 		TableColumn columna;
 		int i;
-		for (i = 0; i < titulos.length - 1; i++) {
+		for (i = 0; i < titulos.length; i++) {
 			columna = table.getColumn(titulos[i]);
-			columna.setMinWidth(150);
+			columna.setMinWidth(medirLon(i) * 7);
 		}
-		columna = table.getColumn(titulos[i]);
-		columna.setMinWidth(700);
+
+	}
+
+	private int medirLon(int i) {
+
+		int max = 0;
+
+		for (int j = 0; j < modeloTabla.getRowCount(); j++) {
+			int tam = String.valueOf(modeloTabla.getValueAt(j, i)).length();
+			if (tam > max)
+				max = tam;
+		}
+		return max;
+
 	}
 
 	public String getNumControlSeleccionado() {
