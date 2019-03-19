@@ -175,7 +175,7 @@ public class PanelBusquedaDevoluciones extends JPanel {
 			linea[2] = a.getLibro().getIsbn();
 			linea[3] = a.getLibro().getTitulo();
 			linea[4] = a.getFechaDePrestamo().toString();
-			linea[5] = ChronoUnit.DAYS.between(a.getFechaDePrestamo(), a.getFechaDeEntrega());
+			linea[5] = ChronoUnit.DAYS.between(a.getFechaDePrestamo(), a.getFechaDeEntrega()) + 1;
 			linea[6] = a.getFechaDeEntrega().toString();
 			modeloTabla.addRow(linea);
 		}

@@ -10,7 +10,7 @@ public class ComparadorLibros implements Comparator<Libro> {
 	public static final String AUTOR = "Autor";
 	public static final String EDITORIAL = "Editorial";
 	public static final String NO_EDICION = "No de Edicion";
-	public static final String AÑO_EDICION = "Año de Edicion";
+	public static final String AÃ‘O_EDICION = "Aï¿½o de Edicion";
 	public static final String IDIOMA = "Idioma";
 	public static final String PAIS = "Pais";
 	private int orden;
@@ -46,7 +46,7 @@ public class ComparadorLibros implements Comparator<Libro> {
 		case NO_EDICION:
 			return l1.getNumeroEdicion().compareTo(l2.getNumeroEdicion()) * orden;
 
-		case AÑO_EDICION:
+		case AÃ‘O_EDICION:
 			return l1.getAnioEdicion().compareTo(l2.getAnioEdicion()) * orden;
 
 		case IDIOMA:
@@ -66,7 +66,7 @@ public class ComparadorLibros implements Comparator<Libro> {
 		c[2] = AUTOR;
 		c[3] = EDITORIAL;
 		c[4] = NO_EDICION;
-		c[5] = AÑO_EDICION;
+		c[5] = AÃ‘O_EDICION;
 		c[6] = IDIOMA;
 		c[7] = PAIS;
 		return c;

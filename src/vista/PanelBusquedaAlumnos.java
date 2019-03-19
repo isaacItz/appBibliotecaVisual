@@ -137,8 +137,8 @@ public class PanelBusquedaAlumnos extends JPanel {
 
 	private void setEspacioRegistrosop2() {
 		TableColumn columna;
-		int i;
-		for (i = 0; i < titulos.length; i++) {
+
+		for (int i = 0; i < titulos.length; i++) {
 			columna = table.getColumn(titulos[i]);
 			columna.setMinWidth(medirLon(i) * 7);
 		}

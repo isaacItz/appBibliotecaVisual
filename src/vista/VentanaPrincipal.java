@@ -256,11 +256,12 @@ public class VentanaPrincipal extends JFrame {
 										if (fecha != null) {
 											pres.setFechaDePrestamo(fecha);
 
-											if (fecha.plusDays(1).getDayOfWeek() == DayOfWeek.SATURDAY
-													|| fecha.plusDays(2).getDayOfWeek() == (DayOfWeek.SUNDAY)) {
-												pres.setFechaDeEntrega(fecha.plusDays(5));
-											} else
+											if (fecha.plusDays(1).getDayOfWeek() == DayOfWeek.SATURDAY) {
+												pres.setFechaDeEntrega(fecha.plusDays(4));
+											} else if (fecha.plusDays(2).getDayOfWeek() == (DayOfWeek.SUNDAY))
 												pres.setFechaDeEntrega(fecha.plusDays(3));
+											else
+												pres.setFechaDeEntrega(fecha.plusDays(2));
 
 											prestamos.agregar(pres);
 											escribir("Prestamo Realizado");
