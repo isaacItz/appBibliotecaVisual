@@ -4,9 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import modelo.UtileriaIO;
-
-public class CodigosPostales implements Serializable{
+public class CodigosPostales implements Serializable {
 	private List<CodigoPostal> codigos;
 
 	public CodigosPostales() {
@@ -48,10 +46,13 @@ public class CodigosPostales implements Serializable{
 	}
 
 	public List<String> getColonias(String codigo) {
-//		List<String> listaColonias = new ArrayList<>();
-		CodigoPostal cp = codigos.get(codigos.indexOf(new CodigoPostal(codigo)));
-
-		return cp.getColonia();
+		// List<String> listaColonias = new ArrayList<>();
+		int pos = codigos.indexOf(new CodigoPostal(codigo));
+		if (pos != -1) {
+			CodigoPostal cp = codigos.get(pos);
+			return cp.getColonia();
+		} else
+			return null;
 
 	}
 

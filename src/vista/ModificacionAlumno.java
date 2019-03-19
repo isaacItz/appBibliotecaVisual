@@ -11,6 +11,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
@@ -30,7 +31,10 @@ import javax.swing.border.TitledBorder;
 import com.toedter.calendar.JDateChooser;
 
 import modelo.Alumno;
+import modelo.CodigoPostal;
+import modelo.CodigosPostales;
 import modelo.Direccion;
+import modelo.Utileria;
 
 public class ModificacionAlumno extends JDialog {
 
@@ -54,12 +58,19 @@ public class ModificacionAlumno extends JDialog {
 	private ButtonGroup grupo;
 	private JDateChooser dateChooser;
 	private JComboBox<String> comboBox;
+	private Utileria uti;
+	private CodigosPostales codigosPostales;
 
 	/**
 	 * Create the dialog.
 	 */
-	public ModificacionAlumno(Alumno alumno, String[] lista) {
-		this.lista = lista;
+	public ModificacionAlumno(Alumno alumno, String[] lista, CodigosPostales codigosPostales) {
+		this.codigosPostales = codigosPostales;
+		uti = new Utileria();
+		if (lista != null)
+			this.lista = lista;
+		else
+			this.lista = new String[0];
 		a = alumno;
 		setBounds(100, 100, 683, 457);
 		getContentPane().setLayout(new BorderLayout());
@@ -207,11 +218,30 @@ public class ModificacionAlumno extends JDialog {
 					label.setForeground(Color.BLACK);
 					label.setFont(new Font("Tahoma", Font.ITALIC, 13));
 					panel_1.add(label);
+
 				}
 				{
 					textFieldCP = new JTextField();
 					textFieldCP.setColumns(10);
 					panel_1.add(textFieldCP);
+					textFieldCP.addActionListener(new ActionListener() {
+
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							if (!uti.estaVacio(textFieldCP) && textFieldCP.getText().length() == 5) {
+								CodigoPostal cp = codigosPostales.existe(textFieldCP.getText());
+								textFieldEstado.setText(cp.getEstado().get(0));
+								if (modeloLista != null) {
+									modeloLista.removeAllElements();
+									agregarColonias(textFieldCP.getText());
+								}
+								textFieldMunicipio.setText(cp.getCiudad().get(0));
+							} else {
+								uti.escribir("Ingrese el dato solicitado la longitud debe ser 5 caracteres");
+
+							}
+						}
+					});
 				}
 				{
 					JLabel label = new JLabel("Ingrese el nombre de la colonia");
@@ -277,7 +307,7 @@ public class ModificacionAlumno extends JDialog {
 				});
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+				// getRootPane().setDefaultButton(okButton);
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
@@ -299,6 +329,15 @@ public class ModificacionAlumno extends JDialog {
 
 	}
 
+	private void agregarColonias(String codigo) {
+		List<String> colonias = codigosPostales.getColonias(codigo);
+
+		for (String colonia : colonias) {
+			if (!modeloLista.contains(colonia))
+				modeloLista.addElement(colonia);
+		}
+	}
+
 	private void setTextos() {
 		textFieldNC.setText(a.getNoControl());
 		textFieldCarrera.setText(a.getCarrera());
@@ -310,9 +349,9 @@ public class ModificacionAlumno extends JDialog {
 		textFieldNumeroCasa.setText(a.getDireccion().getNoCasa());
 		textFieldMunicipio.setText(a.getDireccion().getMunicipio());
 		textFieldNombreCalle.setText(a.getDireccion().getCalle());
-		for (String string : lista) {
+		for (String string : lista)
 			modeloLista.addElement(string);
-		}
+		list.setSelectedValue(a.getDireccion().getColonia(), true);
 		if (a.getGenero() == 'M')
 			radioButtonM.setSelected(true);
 		else

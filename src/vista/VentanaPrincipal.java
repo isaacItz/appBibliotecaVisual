@@ -515,8 +515,12 @@ public class VentanaPrincipal extends JFrame {
 						String numC = panelBusquedaAlumnos.getNumControlSeleccionado();
 						Alumno a = grupo.buscar(numC);
 						List<String> cols = codP.getColonias(a.getDireccion().getcP());
-						String[] c = cols.toArray(new String[cols.size()]);
-						new ModificacionAlumno(a, c);
+						String[] c = null;
+						if (cols != null)
+							c = cols.toArray(new String[cols.size()]);
+
+						new ModificacionAlumno(a, c, codP);
+
 					} else
 						actualizarAlumno();
 				} else
@@ -818,7 +822,7 @@ public class VentanaPrincipal extends JFrame {
 			if (a != null) {
 				List<String> cols = codP.getColonias(a.getDireccion().getcP());
 				String[] c = cols.toArray(new String[cols.size()]);
-				new ModificacionAlumno(a, c);
+				new ModificacionAlumno(a, c, codP);
 			} else
 				escribir("El Alumno no Existe");
 		}
