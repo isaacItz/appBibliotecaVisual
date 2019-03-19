@@ -543,7 +543,9 @@ public class VentanaPrincipal extends JFrame {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 
-						Collections.sort(grupo.getList(), new ComparadorAlumnos(or.getSeleccion()[0]));
+						int orden = or.getSeleccion()[1].equals("Ascendente") ? 1 : -1;
+
+						Collections.sort(grupo.getList(), new ComparadorAlumnos(or.getSeleccion()[0], orden));
 						actualizarTablaA();
 						or.dispose();
 						System.out.println("Fin Ordenacion");
@@ -700,7 +702,8 @@ public class VentanaPrincipal extends JFrame {
 
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
-						Collections.sort(estante.getList(), new ComparadorLibros(or.getSeleccion()[0]));
+						Collections.sort(estante.getList(), new ComparadorLibros(or.getSeleccion()[0],
+								or.getSeleccion()[1].equals("Ascendente") ? 1 : -1));
 						actualizarTablaL();
 						or.dispose();
 						System.out.println("Fin Ordenacion");

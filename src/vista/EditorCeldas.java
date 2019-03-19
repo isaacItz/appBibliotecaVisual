@@ -20,8 +20,10 @@ public class EditorCeldas extends JLabel implements TableCellRenderer {
 
 		if ((column == Columns && Long.parseLong(value.toString()) > 3)) {
 			// System.out.println(value + " " + (value.toString().compareTo("3") > 0));
-			setForeground(Color.RED); // Una condicion arbitraria solo para pintar el JLabel que esta en la celda.
-			setText(String.valueOf(value)); // Se agrega el valor que viene por defecto en la celda
+			setForeground(Color.RED);
+			setText(String.valueOf(value));
+			isSelected = true;
+			// table.setCellSelectionEnabled(true);
 		} else {
 			setForeground(Color.GREEN);
 			setText(String.valueOf(value));

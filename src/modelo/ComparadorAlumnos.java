@@ -11,10 +11,19 @@ public class ComparadorAlumnos implements Comparator<Alumno> {
 	public final static String GENERO = "Genero";
 	public final static String SEMESTRE = "Semestre";
 	public final static String CARRERA = "Carrera";
+	public final static int ASCENDENTE = 1;
+	public final static int DESCENDENTE = -1;
+	private int orden;
 	private String criterio;
+
+	public ComparadorAlumnos(String c, int orden) {
+		criterio = c;
+		this.orden = orden;
+	}
 
 	public ComparadorAlumnos(String c) {
 		criterio = c;
+		this.orden = 1;
 	}
 
 	public static String[] getCriterios() {
@@ -52,6 +61,6 @@ public class ComparadorAlumnos implements Comparator<Alumno> {
 			v = a1.getCarrera().compareTo(a2.getCarrera());
 			break;
 		}
-		return v;
+		return v * orden;
 	}
 }

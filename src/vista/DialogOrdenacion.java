@@ -53,7 +53,7 @@ public class DialogOrdenacion extends JDialog {
 			contentPanel.add(panel);
 			panel.setLayout(new BorderLayout(0, 0));
 
-			list = new JList<String>(new String[] { "Ascendente", "descendente" });
+			list = new JList<String>(new String[] { "Ascendente", "Descendente" });
 			list.setSelectedIndex(0);
 			scrollPane = new JScrollPane(list);
 			panel.add(scrollPane);

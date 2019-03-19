@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -123,6 +124,7 @@ public class PanelBusquedaDevoluciones extends JPanel {
 				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(stringSelection, stringSelection);
 			}
 		});
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		JScrollPane scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		panel_2.add(scrollPane, BorderLayout.CENTER);
@@ -181,7 +183,6 @@ public class PanelBusquedaDevoluciones extends JPanel {
 		EditorCeldas TableCellRenderer = new EditorCeldas();
 		TableCellRenderer.setColumns(5);
 		columna.setCellRenderer(TableCellRenderer);
-
 	}
 
 	public void agregarPrestamos(Prestamo[] lista) {

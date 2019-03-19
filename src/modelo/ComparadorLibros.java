@@ -13,10 +13,18 @@ public class ComparadorLibros implements Comparator<Libro> {
 	public static final String AÑO_EDICION = "Año de Edicion";
 	public static final String IDIOMA = "Idioma";
 	public static final String PAIS = "Pais";
+	private int orden;
+
+	public ComparadorLibros(String criterio, int orden) {
+		super();
+		this.criterio = criterio;
+		this.orden = orden;
+	}
 
 	public ComparadorLibros(String criterio) {
 		super();
 		this.criterio = criterio;
+		orden = 1;
 	}
 
 	@Override
@@ -24,31 +32,31 @@ public class ComparadorLibros implements Comparator<Libro> {
 
 		switch (criterio) {
 		case ISBN:
-			return l1.getIsbn().compareTo(l2.getIsbn());
+			return l1.getIsbn().compareTo(l2.getIsbn()) * orden;
 
 		case TITULO:
-			return l1.getTitulo().compareTo(l2.getTitulo());
+			return l1.getTitulo().compareTo(l2.getTitulo()) * orden;
 
 		case AUTOR:
-			return l1.getAutor().compareTo(l2.getAutor());
+			return l1.getAutor().compareTo(l2.getAutor()) * orden;
 
 		case EDITORIAL:
-			return l1.getEditoria().compareTo(l2.getEditoria());
+			return l1.getEditoria().compareTo(l2.getEditoria()) * orden;
 
 		case NO_EDICION:
-			return l1.getNumeroEdicion().compareTo(l2.getNumeroEdicion());
+			return l1.getNumeroEdicion().compareTo(l2.getNumeroEdicion()) * orden;
 
 		case AÑO_EDICION:
-			return l1.getAnioEdicion().compareTo(l2.getAnioEdicion());
+			return l1.getAnioEdicion().compareTo(l2.getAnioEdicion()) * orden;
 
 		case IDIOMA:
-			return l1.getIdioma().compareTo(l2.getIdioma());
+			return l1.getIdioma().compareTo(l2.getIdioma()) * orden;
 
 		case PAIS:
-			return l1.getIdioma().compareTo(l2.getIdioma());
+			return l1.getIdioma().compareTo(l2.getIdioma()) * orden;
 		}
 
-		return -1;
+		return 0;
 	}
 
 	public static String[] getCriterios() {
