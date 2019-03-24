@@ -13,6 +13,7 @@ import java.util.Calendar;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -24,7 +25,7 @@ import com.toedter.calendar.JYearChooser;
 import modelo.Estante;
 import modelo.Libro;
 
-public class PanelCentralLibros extends JPanel {
+public class ModLibro extends JDialog {
 	/**
 	 * 
 	 */
@@ -41,16 +42,18 @@ public class PanelCentralLibros extends JPanel {
 	private JButton botonSalir;
 	private JComboBox<String> cbEdicion;
 	private Calendar cal;
+	private Libro l;
 
 	/**
 	 * Create the panel.
 	 */
-	public PanelCentralLibros() {
-		setLayout(new BorderLayout(0, 0));
+	public ModLibro(Libro libro) {
+		l = libro;
+		getContentPane().setLayout(new BorderLayout(0, 0));
 		estante = new Estante();
 		JPanel PanelTitulo = new JPanel();
 		PanelTitulo.setBackground(Color.DARK_GRAY);
-		add(PanelTitulo, BorderLayout.NORTH);
+		getContentPane().add(PanelTitulo, BorderLayout.NORTH);
 		PanelTitulo.setLayout(new GridLayout(2, 1, 0, 0));
 
 		cal = Calendar.getInstance();
@@ -70,13 +73,21 @@ public class PanelCentralLibros extends JPanel {
 
 		JPanel PanelOpciones = new JPanel();
 		PanelOpciones.setBackground(Color.DARK_GRAY);
-		add(PanelOpciones, BorderLayout.SOUTH);
+		getContentPane().add(PanelOpciones, BorderLayout.SOUTH);
 
 		BotonAceptar = new JButton("Aceptar");
 		BotonAceptar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent arg0) {
 				if (!hayCajasVacias()) {
-
+					l.setTitulo(cajaTitulo.getText());
+					l.setAutor(cajaAutor.getText());
+					l.setEditoria(cajaEditorial.getText());
+					l.setAnioEdicion(String.valueOf(cajaAnioEdicion.getYear()));
+					l.setIdioma(cajaIdioma.getText());
+					l.setPais(cajaPais.getText());
+					l.setNumeroEdicion(cbEdicion.getSelectedItem().toString());
+					JOptionPane.showMessageDialog(null, "Libro Actualizado Con Exito");
+					dispose();
 				} else
 					JOptionPane.showMessageDialog(null, "Hay Cajas Vacias");
 
@@ -87,22 +98,23 @@ public class PanelCentralLibros extends JPanel {
 		BotonAceptar.setBorderPainted(false);
 		BotonAceptar.setForeground(new Color(255, 255, 0));
 		BotonAceptar.setHorizontalTextPosition(SwingConstants.CENTER);
-		BotonAceptar.setIcon(new ImageIcon(PanelCentralLibros.class.getResource("/Recursos/botonAzul.gif")));
+		BotonAceptar.setIcon(new ImageIcon(ModLibro.class.getResource("/Recursos/botonAzul.gif")));
 		PanelOpciones.add(BotonAceptar);
 
 		botonSalir = new JButton("Salir");
+		botonSalir.addActionListener(x -> dispose());
 		botonSalir.setFocusPainted(false);
 		botonSalir.setContentAreaFilled(false);
 		botonSalir.setBorderPainted(false);
 		botonSalir.setForeground(new Color(255, 255, 0));
 		botonSalir.setHorizontalTextPosition(SwingConstants.CENTER);
-		botonSalir.setIcon(new ImageIcon(PanelCentralLibros.class.getResource("/Recursos/botonAzul.gif")));
+		botonSalir.setIcon(new ImageIcon(ModLibro.class.getResource("/Recursos/botonAzul.gif")));
 		PanelOpciones.add(botonSalir);
 
 		JPanel PanelCapturar = new JPanel();
 		PanelCapturar.setMaximumSize(new Dimension(15, 32767));
 		PanelCapturar.setBackground(Color.GRAY);
-		add(PanelCapturar, BorderLayout.CENTER);
+		getContentPane().add(PanelCapturar, BorderLayout.CENTER);
 
 		cajaAutor = new JTextField();
 		cajaAutor.setMinimumSize(new Dimension(15, 0));
@@ -297,6 +309,22 @@ public class PanelCentralLibros extends JPanel {
 		for (String string : values)
 			cbEdicion.addItem(string);
 
+		setTextos();
+		setSize(1100, 600);
+		setLocationRelativeTo(null);
+		setModal(true);
+		setVisible(true);
+	}
+
+	private void setTextos() {
+		cajaISBN.setText(l.getIsbn());
+		cajaISBN.setEnabled(false);
+		cajaTitulo.setText(l.getTitulo());
+		cajaAutor.setText(l.getAutor());
+		cajaEditorial.setText(l.getEditoria());
+		cajaIdioma.setText(l.getIdioma());
+		cajaPais.setText(l.getPais());
+		cbEdicion.setSelectedItem(l.getNumeroEdicion());
 	}
 
 	public JButton getBotonAceptar() {
@@ -325,7 +353,7 @@ public class PanelCentralLibros extends JPanel {
 	private boolean validarAñoE() {
 		Calendar cal = Calendar.getInstance();
 		int year = cal.get(Calendar.YEAR);
-		return cajaAnioEdicion.getYear() < year;
+		return cajaAnioEdicion.getYear() > year;
 
 	}
 

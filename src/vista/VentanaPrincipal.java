@@ -21,7 +21,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -445,7 +444,7 @@ public class VentanaPrincipal extends JFrame {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
-							escribir("Alumno Registrado");
+
 							actualizarTablaA();
 						}
 					});
@@ -491,7 +490,7 @@ public class VentanaPrincipal extends JFrame {
 						String numC = panelBusquedaAlumnos.getNumControlSeleccionado();
 						Alumno a = grupo.buscar(numC);
 						if (!prestamos.existeNumControl(a)) {
-							dialogE = new DialogEliminacion(a.getNombreCompleto());
+							dialogE = new DialogEliminacion(a.getNombreCompleto(), Alumno.class);
 							vincularBotonesDialogE(a);
 						} else
 							escribir("No se Puede Borrar un Alumno con Libros Prestados");
@@ -517,12 +516,7 @@ public class VentanaPrincipal extends JFrame {
 					if (panelBusquedaAlumnos.hayFilaSeleccionada()) {
 						String numC = panelBusquedaAlumnos.getNumControlSeleccionado();
 						Alumno a = grupo.buscar(numC);
-						List<String> cols = codP.getColonias(a.getDireccion().getcP());
-						String[] c = null;
-						if (cols != null)
-							c = cols.toArray(new String[cols.size()]);
-
-						new ModificacionAlumno(a, c, codP);
+						new ModAlumn(codP, a);
 
 					} else
 						actualizarAlumno();
@@ -578,7 +572,7 @@ public class VentanaPrincipal extends JFrame {
 
 						@Override
 						public void actionPerformed(ActionEvent e) {
-							if (!(cajaISBN.getText().isEmpty()) && cajaISBN.getText().length() == 15) {
+							if (!(cajaISBN.getText().isEmpty()) && cajaISBN.getText().length() == 8) {
 								if (!estante.existeLibro(cajaISBN.getText())) {
 									if (!contLetras(panelCentralLibros.getCajaISBN().getText()))
 										panelCentralLibros.enfocarTitulo();
@@ -654,7 +648,7 @@ public class VentanaPrincipal extends JFrame {
 						String isbn = panelBusquedaLibros.getClaveSeleccionada();
 						Libro a = estante.getLibro(isbn);
 						if (!prestamos.existeLbro(a))
-							new ModificacionLibro(a);
+							new ModLibro(a);
 						else
 							escribir("No se Puede Modificar Un Libro Prestado");
 					} else
@@ -676,7 +670,7 @@ public class VentanaPrincipal extends JFrame {
 						String numC = panelBusquedaLibros.getClaveSeleccionada();
 						Libro a = estante.getLibro(numC);
 						if (!prestamos.existeLbro(a)) {
-							dialogE = new DialogEliminacion(a.getTitulo());
+							dialogE = new DialogEliminacion(a.getTitulo(), Libro.class);
 							vincularBotonesDialogEL(a);
 						} else
 							escribir("No se Puede Modificar Un Libro Prestado");
@@ -796,7 +790,7 @@ public class VentanaPrincipal extends JFrame {
 			Alumno a = grupo.buscar(noControl);
 			if (a != null) {
 				if (!prestamos.existeNumControl(a)) {
-					dialogE = new DialogEliminacion(a.getNombreCompleto());
+					dialogE = new DialogEliminacion(a.getNombreCompleto(), Alumno.class);
 					vincularBotonesDialogE(a);
 				} else
 					escribir("No se Puede Borrar un Alumno con Libros Prestados");
@@ -812,7 +806,7 @@ public class VentanaPrincipal extends JFrame {
 			Libro a = estante.getLibro(noControl);
 			if (a != null) {
 				if (!prestamos.existeLbro(a)) {
-					dialogE = new DialogEliminacion(a.getTitulo());
+					dialogE = new DialogEliminacion(a.getTitulo(), Libro.class);
 					vincularBotonesDialogEL(a);
 				} else
 					escribir("No se Puede Eliminar Un Libro Prestado");
@@ -826,9 +820,7 @@ public class VentanaPrincipal extends JFrame {
 		if (noControl != null) {
 			Alumno a = grupo.buscar(noControl);
 			if (a != null) {
-				List<String> cols = codP.getColonias(a.getDireccion().getcP());
-				String[] c = cols.toArray(new String[cols.size()]);
-				new ModificacionAlumno(a, c, codP);
+				new ModAlumn(codP, a);
 			} else
 				escribir("El Alumno no Existe");
 		}
@@ -840,7 +832,7 @@ public class VentanaPrincipal extends JFrame {
 			Libro a = estante.getLibro(noControl);
 			if (a != null) {
 				if (!prestamos.existeLbro(a))
-					new ModificacionLibro(a);
+					new ModLibro(a);
 				else
 					escribir("No se Puede Modificar Un Libro Prestado");
 			} else

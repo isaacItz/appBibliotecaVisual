@@ -19,7 +19,7 @@ public class DialogEliminacion extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public DialogEliminacion(String aEliminar) {
+	public DialogEliminacion(String aEliminar, Class<?> c) {
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -37,7 +37,7 @@ public class DialogEliminacion extends JDialog {
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
-				btnBusq = new JButton("Buscar Otro");
+				btnBusq = new JButton("Buscar Otro " + c.getSimpleName());
 				buttonPane.add(btnBusq);
 			}
 			{

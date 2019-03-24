@@ -6,25 +6,27 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
-import javax.swing.AbstractListModel;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -37,17 +39,13 @@ import javax.swing.event.DocumentListener;
 
 import com.toedter.calendar.JDateChooser;
 
-import Atxy2k.CustomTextField.RestrictedTextField;
 import modelo.Alumno;
 import modelo.CodigoPostal;
 import modelo.CodigosPostales;
 import modelo.Direccion;
-import modelo.Grupo;
 import modelo.Utileria;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
-public class Section extends JPanel {
+public class ModAlumn extends JDialog {
 	/**
 	 * 
 	 */
@@ -57,7 +55,7 @@ public class Section extends JPanel {
 	private JTextField editPaterno;
 	private JTextField editMaterno;
 	private JDateChooser editFechaNac;
-	private JList<String> editCarrera;
+	private JComboBox<String> editCarrera;
 	private ButtonGroup grupoBotones;
 	private JTextField editCalle;
 	private JTextField editNumCasa;
@@ -69,31 +67,33 @@ public class Section extends JPanel {
 	private JRadioButton rdbtnFemenino;
 	private JComboBox<String> comboBoxSemestre;
 	private JButton botonAceptar;
-	private JButton botonCancelar;
 	private JButton botonSalir;
 	private String[] opciones;
 	private JTextField editEstado;
 	private CodigosPostales codigosPostales;
 	private DefaultListModel<String> modeloLista;
 	private JList<String> listColonias;
-	private Grupo grupo;
+	private Alumno a;
 
 	/**
 	 * Create the panel.
 	 */
-	@SuppressWarnings("serial")
-	public Section(CodigosPostales cps, Grupo grupo) {
+	public ModAlumn(CodigosPostales cps, Alumno alumno) {
+		setTitle("Edicion Alumno");
+		setIconImage(Toolkit.getDefaultToolkit().getImage(ModAlumn.class.getResource("/recursos/tree.png")));
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		a = alumno;
+
 		codigosPostales = cps;
-		this.grupo = grupo;
 		grupoBotones = new ButtonGroup();
 		uti = new Utileria();
 		opciones = new String[] { "--Seleccionar--", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" };
-		setLayout(new BorderLayout(0, 0));
+		getContentPane().setLayout(new BorderLayout(0, 0));
 
 		JPanel panelTitulo = new JPanel();
 		panelTitulo.setForeground(Color.WHITE);
 		panelTitulo.setBackground(Color.DARK_GRAY);
-		add(panelTitulo, BorderLayout.NORTH);
+		getContentPane().add(panelTitulo, BorderLayout.NORTH);
 		panelTitulo.setLayout(new GridLayout(2, 1, 0, 0));
 
 		JLabel lblEncabezado = new JLabel("Biblioteca ITZ");
@@ -110,41 +110,28 @@ public class Section extends JPanel {
 
 		JPanel panelBotones = new JPanel();
 		panelBotones.setBackground(Color.DARK_GRAY);
-		add(panelBotones, BorderLayout.SOUTH);
+		getContentPane().add(panelBotones, BorderLayout.SOUTH);
 
 		botonAceptar = new JButton("Aceptar");
 		botonAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (validarCampos()) {
-					Alumno a = new Alumno();
-					a.setNoControl(editNoControl.getText());
-					a.setCarrera(editCarrera.getSelectedValue());
-					Direccion direccion = new Direccion(editCalle.getText(), editNumCasa.getText(),
+					alumno.setCarrera(editCarrera.getSelectedItem().toString());
+					if (rdbtnMasculino.isSelected()) {
+						alumno.setGenero('M');
+					} else
+						alumno.setGenero('F');
+
+					alumno.setMaterno(editMaterno.getText());
+					alumno.setPaterno(editPaterno.getText());
+					alumno.setNombre(editNombre.getText());
+					Direccion d = new Direccion(editCalle.getText(), editNumCasa.getText(),
 							listColonias.getSelectedValue(), editMunicipio.getText(), editEstado.getText(),
 							editCP.getText());
+					alumno.setDireccion(d);
 
-					a.setDireccion(direccion);
-
-					// DateTimeFormatter fechaFormateada =
-					// DateTimeFormatter.ofPattern("yyyy/LL/dd");
-					// System.out.println(fechaFormateada.format(LocalDate.now()));
-					// editFechaNac.setDateFormatString("yyyy/LL/dd");
-					// LocalDate f = LocalDate.parse(editFechaNac.getDate().toString(),
-					// fechaFormateada);
-					LocalDate f = convertToLocalDateViaMilisecond(editFechaNac.getDate());
-
-					a.setFechaNac(f);
-					if (rdbtnFemenino.isSelected())
-						a.setGenero('F');
-					else
-						a.setGenero('M');
-					a.setMaterno(editMaterno.getText());
-					a.setPaterno(editPaterno.getText());
-					a.setNombre(editNombre.getText());
-					a.setSemestre(Integer.parseInt(comboBoxSemestre.getSelectedItem().toString()));
-
-					grupo.agregar(a);
-					escribir("Alumno Registrado");
+					dispose();
+					JOptionPane.showMessageDialog(null, "Alumno Actualizado Con Exito");
 
 					limpiar();
 				}
@@ -154,28 +141,24 @@ public class Section extends JPanel {
 		});
 		panelBotones.add(botonAceptar);
 
-		botonCancelar = new JButton("Cancelar");
-		botonCancelar.addActionListener(new ActionListener() {
+		botonSalir = new JButton("Salir");
+		botonSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
-				limpiar();
+				dispose();
 			}
 		});
-		panelBotones.add(botonCancelar);
-
-		botonSalir = new JButton("Salir");
 		panelBotones.add(botonSalir);
 
 		JPanel panelDatos = new JPanel();
-		add(panelDatos, BorderLayout.CENTER);
-		panelDatos.setLayout(new GridLayout(0, 2, 0, 20));
+		getContentPane().add(panelDatos, BorderLayout.CENTER);
+		panelDatos.setLayout(new GridLayout(0, 2, 0, 0));
 
 		JPanel panelEscolares = new JPanel();
 		panelEscolares.setBackground(Color.GRAY);
 		panelEscolares.setBorder(
 				new TitledBorder(null, "Datos Escolares", TitledBorder.LEADING, TitledBorder.TOP, null, Color.BLUE));
 		panelDatos.add(panelEscolares);
-		panelEscolares.setLayout(new GridLayout(9, 2, 0, 10));
+		panelEscolares.setLayout(new GridLayout(9, 2, 0, 0));
 
 		JLabel lblNoControl = new JLabel("Ingrese el numero de control:");
 		lblNoControl.setForeground(Color.BLACK);
@@ -184,16 +167,7 @@ public class Section extends JPanel {
 		panelEscolares.add(lblNoControl);
 
 		editNoControl = new JTextField();
-		ValidacionTextField.soloNum(editNoControl);
-		ValidacionTextField.limitarTextF(editNoControl, 8);
-
-		editNoControl.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if (valdarNumControl())
-					editNombre.requestFocus();
-			}
-		});
-
+		editNoControl.setEnabled(false);
 		editNoControl.setColumns(10);
 		panelEscolares.add(editNoControl);
 
@@ -345,22 +319,15 @@ public class Section extends JPanel {
 		lblCarrera.setFont(new Font("Tahoma", Font.ITALIC, 13));
 		panelEscolares.add(lblCarrera);
 
-		editCarrera = new JList<>();
+		editCarrera = new JComboBox<>();
 
-		editCarrera.setModel(new AbstractListModel<String>() {
-			String[] values = new String[] { "Seleccione", "Ingenieria en Sistemas Computacionales", "Ingenieria Civil",
-					"Ingenieria Industrial", "Ingenieria Electromecanica", "Ingenieria en Gestion Empresarial",
-					"Ingenieria en Alimentos", "Licenciatura en Administracion", "Contabilidad", "Arquitectura",
-					"Ingenieria en Desarrollo Agricola Sustentable" };
-
-			public int getSize() {
-				return values.length;
-			}
-
-			public String getElementAt(int index) {
-				return values[index];
-			}
-		});
+		String[] values = new String[] { "Seleccione", "Ingenieria en Sistemas Computacionales", "Ingenieria Civil",
+				"Ingenieria Industrial", "Ingenieria Electromecanica", "Ingenieria en Gestion Empresarial",
+				"Ingenieria en Alimentos", "Licenciatura en Administracion", "Contabilidad", "Arquitectura",
+				"Ingenieria en Desarrollo Agricola Sustentable" };
+		for (String string : values) {
+			editCarrera.addItem(string);
+		}
 		JScrollPane scJL = new JScrollPane(editCarrera);
 		panelEscolares.add(scJL);
 		editCarrera.setSelectedIndex(0);
@@ -372,7 +339,7 @@ public class Section extends JPanel {
 		panelPersonales.setBorder(
 				new TitledBorder(null, "Datos Personales", TitledBorder.LEADING, TitledBorder.TOP, null, Color.BLUE));
 		panelDatos.add(panelPersonales);
-		panelPersonales.setLayout(new GridLayout(6, 2, 0, 10));
+		panelPersonales.setLayout(new GridLayout(6, 2, 0, 0));
 
 		JLabel lblCalle = new JLabel("Ingrese el nombre de la calle:");
 		lblCalle.setForeground(Color.BLACK);
@@ -429,17 +396,20 @@ public class Section extends JPanel {
 		panelPersonales.add(lblCP);
 
 		editCP = new JTextField();
-		RestrictedTextField rs = new RestrictedTextField(editCP);
-		rs.setLimit(5);
-		rs.setOnlyNums(true);
+		editCP.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if (Character.isLetter(e.getKeyChar()) || (editCP.getText().length() > 4))
+					e.consume();
+			}
+		});
+
 		editCP.getDocument().addDocumentListener(new DocumentListener() {
 			void methodz() {
 				if (editCP.getText().length() == 5) {
 					CodigoPostal c = valdarCP();
 					if (c != null)
 						agregarCamposCP(c);
-					else
-						escribir("El Codigo Postal no Existe ");
 				} else
 					limpiarAreasCP();
 			}
@@ -519,7 +489,11 @@ public class Section extends JPanel {
 		});
 		editMunicipio.setColumns(10);
 		panelPersonales.add(editMunicipio);
-
+		setTextos();
+		setSize(1100, 600);
+		setLocationRelativeTo(null);
+		setModal(true);
+		setVisible(true);
 	}
 
 	public LocalDate convertToLocalDateViaMilisecond(Date dateToConvert) {
@@ -529,9 +503,9 @@ public class Section extends JPanel {
 	private void agregarColonias(String codigo) {
 		List<String> colonias = codigosPostales.getColonias(codigo);
 		modeloLista.removeAllElements();
-		colonias.stream().forEach(x -> modeloLista.addElement(x));
-		if (modeloLista.getSize() == 1)
-			listColonias.setSelectedIndex(0);
+		for (String string : colonias)
+			modeloLista.addElement(string);
+
 	}
 
 	private void limpiarAreasCP() {
@@ -545,24 +519,6 @@ public class Section extends JPanel {
 
 	public void pedirFoco() {
 		editNoControl.requestFocus();
-	}
-
-	private boolean valdarNumControl() {
-		if (!ValidacionTextField.estaVacio(editNoControl)) {
-			if (uti.validarCaracter(editNoControl, 8)) {
-				if (grupo.buscar(editNoControl.getText()) == null)
-					return true;
-				else
-					escribir("El Alumno ya esta Registrado");
-			} else {
-				uti.escribir("Ingrese los 8 caracteres solictados");
-				editNoControl.requestFocus();
-			}
-		} else {
-			uti.escribir("Llene el campo solicitado");
-			editNoControl.requestFocus();
-		}
-		return false;
 	}
 
 	private CodigoPostal valdarCP() {
@@ -587,8 +543,6 @@ public class Section extends JPanel {
 
 	private boolean validarCampos() {
 
-		if (!valdarNumControl())
-			return false;
 		if (!validacionB(editNombre)) {
 			escribir("Escriba el Nombre");
 			return false;
@@ -658,6 +612,29 @@ public class Section extends JPanel {
 		return true;
 	}
 
+	private void setTextos() {
+		editNoControl.setText(a.getNoControl());
+		editCarrera.setSelectedItem(a.getCarrera());
+		editCP.setText(a.getDireccion().getcP());
+		editEstado.setText(a.getDireccion().getEstado());
+		editMaterno.setText(a.getMaterno());
+		editNombre.setText(a.getNombre());
+		editPaterno.setText(a.getPaterno());
+		editNumCasa.setText(a.getDireccion().getNoCasa());
+		editMunicipio.setText(a.getDireccion().getMunicipio());
+		editCalle.setText(a.getDireccion().getCalle());
+		listColonias.setSelectedValue(a.getDireccion().getColonia(), true);
+		if (a.getGenero() == 'M')
+			rdbtnMasculino.setSelected(true);
+		else
+			rdbtnFemenino.setSelected(true);
+
+		editFechaNac.setDate(
+				new Date(a.getFechaNac().getDayOfMonth(), a.getFechaNac().getMonthValue(), a.getFechaNac().getYear()));
+		comboBoxSemestre.setSelectedIndex(a.getSemestre());
+
+	}
+
 	private void limpiar() {
 		editNoControl.setText(null);
 		editNombre.setText(null);
@@ -677,10 +654,6 @@ public class Section extends JPanel {
 
 	public JButton getBotonAceptar() {
 		return botonAceptar;
-	}
-
-	public JButton getBotonCancelar() {
-		return botonCancelar;
 	}
 
 	public JButton getBotonSalir() {
@@ -707,7 +680,7 @@ public class Section extends JPanel {
 		return editFechaNac;
 	}
 
-	public JList<String> getEditCarrera() {
+	public JComboBox<String> getEditCarrera() {
 		return editCarrera;
 	}
 
