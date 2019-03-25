@@ -516,7 +516,10 @@ public class VentanaPrincipal extends JFrame {
 					if (panelBusquedaAlumnos.hayFilaSeleccionada()) {
 						String numC = panelBusquedaAlumnos.getNumControlSeleccionado();
 						Alumno a = grupo.buscar(numC);
-						new ModAlumn(codP, a);
+						if (!prestamos.existeNumControl(a)) {
+							new ModAlumn(codP, a);
+						} else
+							escribir("No se Puede Modificar un Alumno con Libros Prestados");
 
 					} else
 						actualizarAlumno();

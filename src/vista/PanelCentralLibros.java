@@ -73,15 +73,7 @@ public class PanelCentralLibros extends JPanel {
 		add(PanelOpciones, BorderLayout.SOUTH);
 
 		BotonAceptar = new JButton("Aceptar");
-		BotonAceptar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (!hayCajasVacias()) {
 
-				} else
-					JOptionPane.showMessageDialog(null, "Hay Cajas Vacias");
-
-			}
-		});
 		BotonAceptar.setFocusPainted(false);
 		BotonAceptar.setContentAreaFilled(false);
 		BotonAceptar.setBorderPainted(false);
@@ -113,6 +105,7 @@ public class PanelCentralLibros extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!(cajaAutor.getText().isEmpty())) {
+					hacerMayuscula(cajaAutor);
 					cajaEditorial.requestFocus();
 				} else
 					JOptionPane.showMessageDialog(null, "Esta vacia");
@@ -147,6 +140,7 @@ public class PanelCentralLibros extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!(cajaTitulo.getText().isEmpty())) {
+					hacerMayuscula(cajaTitulo);
 					cajaAutor.requestFocus();
 				} else
 					JOptionPane.showMessageDialog(null, "Esta vacia");
@@ -224,6 +218,7 @@ public class PanelCentralLibros extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!(cajaIdioma.getText().isEmpty())) {
+					hacerMayuscula(cajaIdioma);
 					cajaPais.requestFocus();
 				} else
 					JOptionPane.showMessageDialog(null, "Esta vacia");
@@ -263,6 +258,7 @@ public class PanelCentralLibros extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!(cajaEditorial.getText().isEmpty())) {
+					hacerMayuscula(cajaEditorial);
 					cbEdicion.requestFocus();
 				} else
 					JOptionPane.showMessageDialog(null, "Esta vacia");
@@ -281,7 +277,9 @@ public class PanelCentralLibros extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if ((cajaPais.getText().isEmpty()))
+				if (!(cajaPais.getText().isEmpty())) {
+					hacerMayuscula(cajaPais);
+				} else
 					JOptionPane.showMessageDialog(null, "Ingrese un Pais");
 			}
 		});
@@ -327,6 +325,25 @@ public class PanelCentralLibros extends JPanel {
 		int year = cal.get(Calendar.YEAR);
 		return cajaAnioEdicion.getYear() < year;
 
+	}
+
+	private boolean hacerMayuscula(JTextField t) {
+		try {
+			String cad = t.getText();
+			char[] array = cad.toCharArray();
+
+			array[0] = Character.toUpperCase(array[0]);
+
+			for (int i = 1; i < cad.length() - 1; i++) {
+				if (array[i] == ' ') {
+					array[i + 1] = Character.toUpperCase(array[i + 1]);
+				}
+			}
+			t.setText(new String(array));
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 	public boolean hayCajasVacias() {

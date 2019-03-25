@@ -208,6 +208,7 @@ public class Section extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!uti.estaVacio(editNombre)) {
+					hacerMayuscula(editNombre);
 					if (uti.isHombre(editNombre)) {
 						rdbtnMasculino.setSelected(true);
 					} else {
@@ -240,6 +241,7 @@ public class Section extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!uti.estaVacio(editPaterno)) {
+					hacerMayuscula(editPaterno);
 					editMaterno.requestFocus();
 				} else {
 					uti.escribir("Ingrese el dato solicitado");
@@ -262,6 +264,7 @@ public class Section extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!uti.estaVacio(editMaterno)) {
+					hacerMayuscula(editMaterno);
 					editFechaNac.requestFocus();
 				} else {
 					uti.escribir("Ingrese el Apellido Materno");
@@ -385,6 +388,7 @@ public class Section extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!uti.estaVacio(editCalle)) {
+					hacerMayuscula(editCalle);
 					editNumCasa.requestFocus();
 				} else {
 					uti.escribir("Ingrese el dato solicitado");
@@ -540,6 +544,25 @@ public class Section extends JPanel {
 		if (!(editEstado.getText().isEmpty() && editMunicipio.getText().isEmpty())) {
 			editEstado.setText("");
 			editMunicipio.setText("");
+		}
+	}
+
+	private boolean hacerMayuscula(JTextField t) {
+		try {
+			String cad = t.getText();
+			char[] array = cad.toCharArray();
+
+			array[0] = Character.toUpperCase(array[0]);
+
+			for (int i = 1; i < cad.length() - 1; i++) {
+				if (array[i] == ' ') {
+					array[i + 1] = Character.toUpperCase(array[i + 1]);
+				}
+			}
+			t.setText(new String(array));
+			return true;
+		} catch (Exception e) {
+			return false;
 		}
 	}
 
