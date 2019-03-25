@@ -70,8 +70,8 @@ public class Direccion implements Serializable {
 
 	@Override
 	public String toString() {
-		return "calle=" + calle + ", noCasa=" + noCasa + ", colonia=" + colonia + ", municipio=" + municipio
-				+ ", estado=" + estado + ", cP=" + cP;
+		return "Calle: " + calle + ", No. de Casa: " + noCasa + ", Colonia: " + colonia + ", Municipio: " + municipio
+				+ ", Estado:" + estado + ", CP:" + cP;
 	}
 
 }

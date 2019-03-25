@@ -8,6 +8,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -203,12 +205,12 @@ public class Section extends JPanel {
 		panelEscolares.add(lblNombre);
 
 		editNombre = new JTextField();
+		hacerMayuscula(editNombre);
 		editNombre.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!uti.estaVacio(editNombre)) {
-					hacerMayuscula(editNombre);
 					if (uti.isHombre(editNombre)) {
 						rdbtnMasculino.setSelected(true);
 					} else {
@@ -236,12 +238,13 @@ public class Section extends JPanel {
 		panelEscolares.add(lblPaterno);
 
 		editPaterno = new JTextField();
+		hacerMayuscula(editPaterno);
 		editPaterno.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!uti.estaVacio(editPaterno)) {
-					hacerMayuscula(editPaterno);
+
 					editMaterno.requestFocus();
 				} else {
 					uti.escribir("Ingrese el dato solicitado");
@@ -259,12 +262,12 @@ public class Section extends JPanel {
 		panelEscolares.add(lblMaterno);
 
 		editMaterno = new JTextField();
+		hacerMayuscula(editMaterno);
 		editMaterno.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!uti.estaVacio(editMaterno)) {
-					hacerMayuscula(editMaterno);
 					editFechaNac.requestFocus();
 				} else {
 					uti.escribir("Ingrese el Apellido Materno");
@@ -383,12 +386,13 @@ public class Section extends JPanel {
 		panelPersonales.add(lblCalle);
 
 		editCalle = new JTextField();
+		hacerMayuscula(editCalle);
 		editCalle.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!uti.estaVacio(editCalle)) {
-					hacerMayuscula(editCalle);
+
 					editNumCasa.requestFocus();
 				} else {
 					uti.escribir("Ingrese el dato solicitado");
@@ -549,17 +553,31 @@ public class Section extends JPanel {
 
 	private boolean hacerMayuscula(JTextField t) {
 		try {
-			String cad = t.getText();
-			char[] array = cad.toCharArray();
 
-			array[0] = Character.toUpperCase(array[0]);
+			t.addFocusListener(new FocusListener() {
 
-			for (int i = 1; i < cad.length() - 1; i++) {
-				if (array[i] == ' ') {
-					array[i + 1] = Character.toUpperCase(array[i + 1]);
+				@Override
+				public void focusLost(FocusEvent e) {
+					if (!uti.estaVacio(t)) {
+						String cad = t.getText();
+						char[] array = cad.toCharArray();
+
+						array[0] = Character.toUpperCase(array[0]);
+
+						for (int i = 1; i < cad.length() - 1; i++) {
+							if (array[i] == ' ') {
+								array[i + 1] = Character.toUpperCase(array[i + 1]);
+							}
+						}
+						t.setText(new String(array));
+					}
 				}
-			}
-			t.setText(new String(array));
+
+				@Override
+				public void focusGained(FocusEvent e) {
+				}
+			});
+
 			return true;
 		} catch (Exception e) {
 			return false;

@@ -8,6 +8,8 @@ import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.Calendar;
 
 import javax.swing.ImageIcon;
@@ -100,12 +102,13 @@ public class PanelCentralLibros extends JPanel {
 		cajaAutor.setMinimumSize(new Dimension(15, 0));
 		cajaAutor.setPreferredSize(new Dimension(15, 100));
 		ValidacionTextField.soloTexto(cajaAutor);
+		hacerMayuscula(cajaAutor);
 		cajaAutor.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!(cajaAutor.getText().isEmpty())) {
-					hacerMayuscula(cajaAutor);
+
 					cajaEditorial.requestFocus();
 				} else
 					JOptionPane.showMessageDialog(null, "Esta vacia");
@@ -134,13 +137,13 @@ public class PanelCentralLibros extends JPanel {
 		cajaTitulo = new JTextField();
 		cajaTitulo.setMinimumSize(new Dimension(15, 0));
 		cajaTitulo.setPreferredSize(new Dimension(15, 30));
-
+		hacerMayuscula(cajaTitulo);
 		cajaTitulo.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!(cajaTitulo.getText().isEmpty())) {
-					hacerMayuscula(cajaTitulo);
+
 					cajaAutor.requestFocus();
 				} else
 					JOptionPane.showMessageDialog(null, "Esta vacia");
@@ -212,13 +215,14 @@ public class PanelCentralLibros extends JPanel {
 		cajaIdioma = new JTextField();
 		cajaIdioma.setMinimumSize(new Dimension(15, 0));
 		cajaIdioma.setPreferredSize(new Dimension(15, 100));
+		hacerMayuscula(cajaIdioma);
 		ValidacionTextField.soloTexto(cajaIdioma);
 		cajaIdioma.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!(cajaIdioma.getText().isEmpty())) {
-					hacerMayuscula(cajaIdioma);
+
 					cajaPais.requestFocus();
 				} else
 					JOptionPane.showMessageDialog(null, "Esta vacia");
@@ -253,12 +257,13 @@ public class PanelCentralLibros extends JPanel {
 		cajaEditorial = new JTextField();
 		cajaEditorial.setMinimumSize(new Dimension(15, 0));
 		cajaEditorial.setPreferredSize(new Dimension(15, 100));
+		hacerMayuscula(cajaEditorial);
 		cajaEditorial.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!(cajaEditorial.getText().isEmpty())) {
-					hacerMayuscula(cajaEditorial);
+
 					cbEdicion.requestFocus();
 				} else
 					JOptionPane.showMessageDialog(null, "Esta vacia");
@@ -272,13 +277,14 @@ public class PanelCentralLibros extends JPanel {
 		cajaPais = new JTextField();
 		cajaPais.setMinimumSize(new Dimension(15, 0));
 		cajaPais.setPreferredSize(new Dimension(15, 100));
+		hacerMayuscula(cajaPais);
 		ValidacionTextField.soloTexto(cajaPais);
 		cajaPais.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!(cajaPais.getText().isEmpty())) {
-					hacerMayuscula(cajaPais);
+
 				} else
 					JOptionPane.showMessageDialog(null, "Ingrese un Pais");
 			}
@@ -329,17 +335,32 @@ public class PanelCentralLibros extends JPanel {
 
 	private boolean hacerMayuscula(JTextField t) {
 		try {
-			String cad = t.getText();
-			char[] array = cad.toCharArray();
 
-			array[0] = Character.toUpperCase(array[0]);
+			t.addFocusListener(new FocusListener() {
 
-			for (int i = 1; i < cad.length() - 1; i++) {
-				if (array[i] == ' ') {
-					array[i + 1] = Character.toUpperCase(array[i + 1]);
+				@Override
+				public void focusLost(FocusEvent e) {
+					if (!t.getText().isEmpty()) {
+						String cad = t.getText();
+						char[] array = cad.toCharArray();
+
+						array[0] = Character.toUpperCase(array[0]);
+
+						for (int i = 1; i < cad.length() - 1; i++) {
+							if (array[i] == ' ') {
+								array[i + 1] = Character.toUpperCase(array[i + 1]);
+							}
+						}
+						t.setText(new String(array));
+					}
+
 				}
-			}
-			t.setText(new String(array));
+
+				@Override
+				public void focusGained(FocusEvent e) {
+				}
+			});
+
 			return true;
 		} catch (Exception e) {
 			return false;
