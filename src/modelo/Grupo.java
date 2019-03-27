@@ -74,6 +74,27 @@ public class Grupo implements Serializable {
 
 	}
 
+	public Object[][] getMatriz() {
+		System.out.println("entro al Metodo getMatriz");
+		List<Object[]> lista = new ArrayList<>();
+
+		for (int i = 0; i < grupo.size(); i++) {
+			Object[] linea = new Object[7];
+			Alumno a = grupo.get(i);
+			linea[0] = a.getNoControl();
+			linea[1] = a.getNombreCompleto();
+			linea[2] = a.getFechaNac();
+			linea[3] = a.getGenero();
+			linea[4] = a.getSemestre();
+			linea[5] = a.getCarrera();
+			linea[6] = a.getDireccion().toString();
+			lista.add(linea);
+		}
+
+		return (Object[][]) lista.toArray(new Object[lista.size()][]);
+
+	}
+
 	public void copiar(List<Alumno> grupo) {
 		this.grupo = grupo;
 	}

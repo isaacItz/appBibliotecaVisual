@@ -12,14 +12,18 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.Calendar;
 
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.border.TitledBorder;
 
 import com.toedter.calendar.JYearChooser;
 
@@ -43,6 +47,22 @@ public class PanelCentralLibros extends JPanel {
 	private JButton botonSalir;
 	private JComboBox<String> cbEdicion;
 	private Calendar cal;
+	private JLabel lblIsbn;
+	private JLabel lblTitulo;
+	private JLabel lblAutor;
+	private JLabel lblEditorial;
+	private JLabel lblPais;
+	private JLabel lblIdioma;
+	private JLabel lblAnioEdicion;
+	private JLabel lblNumeroEdicion;
+	private JPanel panelDatosIzq;
+	private JPanel panelDatosDer;
+	private JPanel PanelCapturar;
+	private JPanel panel;
+	private JScrollPane scrollPane;
+	private JPanel panel_1;
+	private JList<String> listL;
+	private DefaultListModel<String> modeloListaLibros;
 
 	/**
 	 * Create the panel.
@@ -56,6 +76,13 @@ public class PanelCentralLibros extends JPanel {
 		PanelTitulo.setLayout(new GridLayout(2, 1, 0, 0));
 
 		cal = Calendar.getInstance();
+
+		GridLayout gl_panelDatosDer = new GridLayout(0, 2);
+		gl_panelDatosDer.setVgap(25);
+		panelDatosDer = new JPanel(gl_panelDatosDer);
+		GridLayout gl_panelDatosIzq = new GridLayout(0, 2);
+		gl_panelDatosIzq.setVgap(25);
+		panelDatosIzq = new JPanel(gl_panelDatosIzq);
 
 		JLabel lblBibliotecaCentralDe = new JLabel("Biblioteca Central de TecNM");
 		lblBibliotecaCentralDe.setForeground(Color.WHITE);
@@ -93,7 +120,7 @@ public class PanelCentralLibros extends JPanel {
 		botonSalir.setIcon(new ImageIcon(PanelCentralLibros.class.getResource("/Recursos/botonAzul.gif")));
 		PanelOpciones.add(botonSalir);
 
-		JPanel PanelCapturar = new JPanel();
+		PanelCapturar = new JPanel();
 		PanelCapturar.setMaximumSize(new Dimension(15, 32767));
 		PanelCapturar.setBackground(Color.GRAY);
 		add(PanelCapturar, BorderLayout.CENTER);
@@ -114,25 +141,25 @@ public class PanelCentralLibros extends JPanel {
 					JOptionPane.showMessageDialog(null, "Esta vacia");
 			}
 		});
-		PanelCapturar.setLayout(new GridLayout(0, 4, 0, 0));
+		PanelCapturar.setLayout(new GridLayout(0, 3, 0, 0));
 
-		JLabel lblIsbn = new JLabel("ISBN:");
+		lblIsbn = new JLabel("ISBN:");
 		lblIsbn.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblIsbn.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 14));
-		PanelCapturar.add(lblIsbn);
+		panelDatosIzq.add(lblIsbn);
 
 		cajaISBN = new JTextField();
 		ValidacionTextField.soloNum(cajaISBN);
 		ValidacionTextField.limitarTextF(cajaISBN, 8);
 		cajaISBN.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		PanelCapturar.add(cajaISBN);
+		panelDatosIzq.add(cajaISBN);
 		cajaISBN.setBounds(new Rectangle(0, 0, 30, 100));
 		cajaISBN.setColumns(10);
 
-		JLabel lblNumeroEdicion = new JLabel("Numero Edicion:");
+		lblNumeroEdicion = new JLabel("Numero Edicion:");
 		lblNumeroEdicion.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblNumeroEdicion.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 12));
-		PanelCapturar.add(lblNumeroEdicion);
+		panelDatosDer.add(lblNumeroEdicion);
 
 		cajaTitulo = new JTextField();
 		cajaTitulo.setMinimumSize(new Dimension(15, 0));
@@ -153,7 +180,7 @@ public class PanelCentralLibros extends JPanel {
 		cbEdicion = new JComboBox<>();
 		cbEdicion.setMinimumSize(new Dimension(15, 0));
 		cbEdicion.setPreferredSize(new Dimension(15, 100));
-		PanelCapturar.add(cbEdicion);
+		panelDatosDer.add(cbEdicion);
 		cbEdicion.addActionListener(new ActionListener() {
 
 			@Override
@@ -162,54 +189,30 @@ public class PanelCentralLibros extends JPanel {
 			}
 		});
 
-		JLabel label = new JLabel("");
-		PanelCapturar.add(label);
-
-		JLabel label_1 = new JLabel("");
-		PanelCapturar.add(label_1);
-
-		JLabel label_2 = new JLabel("");
-		PanelCapturar.add(label_2);
-
-		JLabel label_3 = new JLabel("");
-		PanelCapturar.add(label_3);
-
-		JLabel lblTitulo = new JLabel("Titulo:");
+		lblTitulo = new JLabel("Titulo:");
 		lblTitulo.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblTitulo.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 14));
-		PanelCapturar.add(lblTitulo);
+		panelDatosIzq.add(lblTitulo);
 		cajaTitulo.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		PanelCapturar.add(cajaTitulo);
+		panelDatosIzq.add(cajaTitulo);
 		cajaTitulo.setColumns(10);
 
-		JLabel lblAnioEdicion = new JLabel("A\u00F1o Edicion:");
+		lblAnioEdicion = new JLabel("Anio de Edicion:");
 		lblAnioEdicion.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblAnioEdicion.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 14));
-		PanelCapturar.add(lblAnioEdicion);
+		panelDatosDer.add(lblAnioEdicion);
 
 		cajaAnioEdicion = new JYearChooser();
 		cajaAnioEdicion.getSpinner().setPreferredSize(new Dimension(15, 30));
 		cajaAnioEdicion.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		PanelCapturar.add(cajaAnioEdicion);
+		panelDatosDer.add(cajaAnioEdicion);
 
-		JLabel label_4 = new JLabel("");
-		PanelCapturar.add(label_4);
-
-		JLabel label_5 = new JLabel("");
-		PanelCapturar.add(label_5);
-
-		JLabel label_6 = new JLabel("");
-		PanelCapturar.add(label_6);
-
-		JLabel label_7 = new JLabel("");
-		PanelCapturar.add(label_7);
-
-		JLabel lblAutor = new JLabel("Autor:");
+		lblAutor = new JLabel("Autor:");
 		lblAutor.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblAutor.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 14));
-		PanelCapturar.add(lblAutor);
+		panelDatosIzq.add(lblAutor);
 		cajaAutor.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		PanelCapturar.add(cajaAutor);
+		panelDatosIzq.add(cajaAutor);
 		cajaAutor.setColumns(10);
 
 		cajaIdioma = new JTextField();
@@ -229,30 +232,18 @@ public class PanelCentralLibros extends JPanel {
 			}
 		});
 
-		JLabel lblIdioma = new JLabel("Idioma");
+		lblIdioma = new JLabel("Idioma");
 		lblIdioma.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblIdioma.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 14));
-		PanelCapturar.add(lblIdioma);
+		panelDatosDer.add(lblIdioma);
 		cajaIdioma.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		PanelCapturar.add(cajaIdioma);
+		panelDatosDer.add(cajaIdioma);
 		cajaIdioma.setColumns(10);
 
-		JLabel label_8 = new JLabel("");
-		PanelCapturar.add(label_8);
-
-		JLabel label_9 = new JLabel("");
-		PanelCapturar.add(label_9);
-
-		JLabel label_10 = new JLabel("");
-		PanelCapturar.add(label_10);
-
-		JLabel label_11 = new JLabel("");
-		PanelCapturar.add(label_11);
-
-		JLabel lblEditorial = new JLabel("Editorial:");
+		lblEditorial = new JLabel("Editorial:");
 		lblEditorial.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblEditorial.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 14));
-		PanelCapturar.add(lblEditorial);
+		panelDatosIzq.add(lblEditorial);
 
 		cajaEditorial = new JTextField();
 		cajaEditorial.setMinimumSize(new Dimension(15, 0));
@@ -271,7 +262,7 @@ public class PanelCentralLibros extends JPanel {
 			}
 		});
 		cajaEditorial.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		PanelCapturar.add(cajaEditorial);
+		panelDatosIzq.add(cajaEditorial);
 		cajaEditorial.setColumns(10);
 
 		cajaPais = new JTextField();
@@ -290,17 +281,34 @@ public class PanelCentralLibros extends JPanel {
 			}
 		});
 
-		JLabel lblPais = new JLabel("Pais:");
+		lblPais = new JLabel("Pais:");
 		lblPais.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblPais.setFont(new Font("Copperplate Gothic Light", Font.PLAIN, 14));
-		PanelCapturar.add(lblPais);
+		panelDatosDer.add(lblPais);
 		cajaPais.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		PanelCapturar.add(cajaPais);
+		panelDatosDer.add(cajaPais);
 		cajaPais.setColumns(10);
 		String[] values = new String[] { "1ra", "2da", "3ra", "4ta", "5ta", "6ta", "7ma", "8va", "9na" };
 		for (String string : values)
 			cbEdicion.addItem(string);
 
+		PanelCapturar.add(panelDatosIzq);
+		PanelCapturar.add(panelDatosDer);
+
+		panel = new JPanel();
+		PanelCapturar.add(panel);
+		panel.setLayout(new BorderLayout(0, 0));
+
+		panel_1 = new JPanel();
+		panel_1.setBorder(new TitledBorder(null, "Ultimos Libros Registrados:", TitledBorder.LEADING, TitledBorder.TOP,
+				null, null));
+		panel.add(panel_1);
+
+		modeloListaLibros = new DefaultListModel<>();
+		panel_1.setLayout(new BorderLayout(0, 0));
+		listL = new JList<>(modeloListaLibros);
+		scrollPane = new JScrollPane(listL);
+		panel_1.add(scrollPane);
 	}
 
 	public JButton getBotonAceptar() {
@@ -371,6 +379,10 @@ public class PanelCentralLibros extends JPanel {
 		return cajaISBN.getText().isEmpty() || cajaTitulo.getText().isEmpty() || cajaAutor.getText().isEmpty()
 				|| cajaIdioma.getText().isEmpty() || validarAñoE() || cajaPais.getText().isEmpty()
 				|| cajaEditorial.getText().isEmpty();
+	}
+
+	void agregarLibroModel(Libro l) {
+		modeloListaLibros.addElement(l.getIsbn().concat(" ").concat(l.getTitulo()));
 	}
 
 	public Libro getLibro() {

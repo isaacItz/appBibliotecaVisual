@@ -47,12 +47,33 @@ public class Estante implements Serializable {
 	}
 
 	public Libro getLibro(String isbn) {
-		Libro libroC = new Libro(isbn);
+		// Libro libroC = new Libro(isbn);
 		for (Libro libro : estante) {
 			if (libro.getIsbn().compareTo(isbn) == 0)
 				return libro;
 		}
 		return null;
+	}
+
+	public Object[][] getMatriz() {
+		List<Object[]> lista = new ArrayList<>();
+
+		for (int i = 0; i < estante.size(); i++) {
+			Object[] linea = new Object[8];
+			Libro l = estante.get(i);
+			linea[0] = l.getIsbn();
+			linea[1] = l.getTitulo();
+			linea[2] = l.getAutor();
+			linea[3] = l.getEditoria();
+			linea[4] = l.getNumeroEdicion();
+			linea[5] = l.getAnioEdicion();
+			linea[6] = l.getIdioma();
+			linea[7] = l.getPais();
+			lista.add(linea);
+		}
+
+		return (Object[][]) lista.toArray(new Object[lista.size()][]);
+
 	}
 
 	public ArrayList<Libro> getList() {

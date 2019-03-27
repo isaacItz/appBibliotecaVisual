@@ -25,6 +25,7 @@ import modelo.Libro;
 public class Cargador {
 
 	public static Libro[] getLibrosArchivo(String ruta) {
+
 		File archivo = new File(ruta);
 		Scanner entrada;
 		try {
@@ -33,6 +34,7 @@ public class Cargador {
 			while (entrada.hasNext()) {
 				String cadena = entrada.nextLine();
 				cadenas.add(cadena);
+				System.out.println(cadena);
 			}
 			entrada.close();
 			Libro[] libros = getLibros(cadenas);

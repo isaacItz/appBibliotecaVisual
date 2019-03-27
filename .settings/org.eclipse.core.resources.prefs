@@ -2,4 +2,5 @@ eclipse.preferences.version=1
 encoding//src/modelo/ComparadorInicioLibros.java=UTF-16
 encoding//src/vista/PanelBusquedaAlumnos.java=ISO-8859-1
 encoding//src/vista/PanelPrestamos.java=UTF-8
+encoding//src/vista/TablaGenerica.java=ISO-8859-1
 encoding/<project>=UTF-8

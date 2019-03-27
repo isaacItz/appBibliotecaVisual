@@ -79,19 +79,21 @@ public class VentanaPrincipal extends JFrame {
 	private ObjectInputStream lectorDeFlujo;
 	private Estante estante;
 	private CodigosPostales codP;
-	private PanelBusquedaAlumnos panelBusquedaAlumnos;
+	// private PanelBusquedaAlumnos panelBusquedaAlumnos;
 	private JButton okButton;
 	private JButton btnBusq;
 	private JButton cancelButton;
 	private DialogEliminacion dialogE;
 	private JButton okButtonOrdenacion;
 	private DialogOrdenacion or;
-	private PanelBusquedaLibros panelBusquedaLibros;
+	// private PanelBusquedaLibros panelBusquedaLibros;
 	private Prestamos prestamos;
 	private PanelPrestamos p;
 	private PanelBusqueda pBP;
 	private PanelBusquedaDevoluciones pBD;
 	private Devoluciones devoluciones;
+	private TablaGenerica tablaAlums;
+	private TablaGenerica tablaLibros;
 
 	/**
 	 * Launch the application.
@@ -463,10 +465,8 @@ public class VentanaPrincipal extends JFrame {
 
 				Object[] titulos = { "Numero de Control", "Nombre", "Edad", "Genero", "Semestre", "Carrera",
 						"Direccion" };
-				if (panelBusquedaAlumnos == null) {
-					panelBusquedaAlumnos = new PanelBusquedaAlumnos(grupo, titulos,
-							ComparadorInicioAlumnos.getCriterios());
-					panelBusquedaAlumnos.agregarAlumnos(grupo.getList());
+				if (tablaAlums == null) {
+					tablaAlums = new TablaGenerica(grupo.getMatriz(), titulos, "Alumnos");
 
 					// BorderLayout layout = (BorderLayout)
 					// contentPane.getLayout();
@@ -474,8 +474,8 @@ public class VentanaPrincipal extends JFrame {
 				}
 
 				actualizarTablaA();
-				focoPantalla(panelBusquedaAlumnos);
-				panelBusquedaAlumnos.pedirFoco();
+				focoPantalla(tablaAlums);
+				tablaAlums.pedirFoco();
 			}
 		});
 
@@ -485,9 +485,9 @@ public class VentanaPrincipal extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				if (panelBusquedaAlumnos != null) {
-					if (panelBusquedaAlumnos.hayFilaSeleccionada()) {
-						String numC = panelBusquedaAlumnos.getNumControlSeleccionado();
+				if (tablaAlums != null) {
+					if (tablaAlums.hayFilaSeleccionada()) {
+						String numC = tablaAlums.getClaveSeleccionada();
 						Alumno a = grupo.buscar(numC);
 						if (!prestamos.existeNumControl(a)) {
 							dialogE = new DialogEliminacion(a.getNombreCompleto(), Alumno.class);
@@ -511,10 +511,10 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (panelBusquedaAlumnos != null) {
+				if (tablaAlums != null) {
 
-					if (panelBusquedaAlumnos.hayFilaSeleccionada()) {
-						String numC = panelBusquedaAlumnos.getNumControlSeleccionado();
+					if (tablaAlums.hayFilaSeleccionada()) {
+						String numC = tablaAlums.getClaveSeleccionada();
 						Alumno a = grupo.buscar(numC);
 						if (!prestamos.existeNumControl(a)) {
 							new ModAlumn(codP, a);
@@ -613,7 +613,9 @@ public class VentanaPrincipal extends JFrame {
 								if (!(estante.existeLibro(panelCentralLibros.getCajaISBN().getText()))) {
 									estante.agregar(panelCentralLibros.getLibro());
 									escribir("Libro registrado con exito");
+									panelCentralLibros.agregarLibroModel(panelCentralLibros.getLibro());
 									panelCentralLibros.vaciarCajas();
+
 								} else
 									escribir("El libro ya existe");
 							} else {
@@ -622,8 +624,8 @@ public class VentanaPrincipal extends JFrame {
 						}
 					});
 
+					focoPantalla(panelCentralLibros);
 				}
-				focoPantalla(panelCentralLibros);
 			}
 		});
 		botonConsultarLibro = menuLateral.getBotonConsultar();
@@ -631,12 +633,11 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (panelBusquedaLibros == null)
-					panelBusquedaLibros = new PanelBusquedaLibros(estante, ComparadorLibros.getCriterios(),
-							ComparadorLibros.getCriterios());
+				if (tablaLibros == null)
+					tablaLibros = new TablaGenerica(estante.getMatriz(), ComparadorLibros.getCriterios(), "Libros");
 				actualizarTablaL();
-				focoPantalla(panelBusquedaLibros);
-				panelBusquedaLibros.pedirFoco();
+				focoPantalla(tablaLibros);
+				tablaLibros.pedirFoco();
 			}
 		});
 
@@ -646,9 +647,9 @@ public class VentanaPrincipal extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				if (panelBusquedaLibros != null) {
-					if (panelBusquedaLibros.hayFilaSeleccionada()) {
-						String isbn = panelBusquedaLibros.getClaveSeleccionada();
+				if (tablaLibros != null) {
+					if (tablaLibros.hayFilaSeleccionada()) {
+						String isbn = tablaLibros.getClaveSeleccionada();
 						Libro a = estante.getLibro(isbn);
 						if (!prestamos.existeLbro(a))
 							new ModLibro(a);
@@ -668,9 +669,9 @@ public class VentanaPrincipal extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 
-				if (panelBusquedaLibros != null) {
-					if (panelBusquedaLibros.hayFilaSeleccionada()) {
-						String numC = panelBusquedaLibros.getClaveSeleccionada();
+				if (tablaLibros != null) {
+					if (tablaLibros.hayFilaSeleccionada()) {
+						String numC = tablaLibros.getClaveSeleccionada();
 						Libro a = estante.getLibro(numC);
 						if (!prestamos.existeLbro(a)) {
 							dialogE = new DialogEliminacion(a.getTitulo(), Libro.class);
@@ -722,7 +723,8 @@ public class VentanaPrincipal extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				dialogE.dispose();
 				grupo.eliminar(a);
-				escribir("Libro Eliminado");
+				escribir("Alumno Eliminado");
+				actualizarTablaA();
 			}
 		});
 		cancelButton = dialogE.getCancelButton();
@@ -738,10 +740,10 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (panelBusquedaAlumnos != null) {
+				if (tablaAlums != null) {
 					dialogE.dispose();
-					focoPantalla(panelBusquedaAlumnos);
-					panelBusquedaAlumnos.pedirFoco();
+					focoPantalla(tablaAlums);
+					tablaAlums.pedirFoco();
 				}
 			}
 		});
@@ -756,6 +758,7 @@ public class VentanaPrincipal extends JFrame {
 				dialogE.dispose();
 				estante.eliminar(l);
 				escribir("Libro Eliminado");
+				actualizarTablaL();
 			}
 		});
 		cancelButton = dialogE.getCancelButton();
@@ -771,10 +774,10 @@ public class VentanaPrincipal extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (panelBusquedaLibros != null) {
+				if (tablaLibros != null) {
 					dialogE.dispose();
-					focoPantalla(panelBusquedaLibros);
-					panelBusquedaLibros.pedirFoco();
+					focoPantalla(tablaLibros);
+					tablaLibros.pedirFoco();
 				}
 			}
 		});
@@ -852,14 +855,14 @@ public class VentanaPrincipal extends JFrame {
 	}
 
 	private void actualizarTablaA() {
-		if (panelBusquedaAlumnos != null) {
-			panelBusquedaAlumnos.actualizarTabla();
+		if (tablaAlums != null) {
+			tablaAlums.actualizarTabla(grupo.getMatriz());
 		}
 	}
 
 	private void actualizarTablaL() {
-		if (panelBusquedaLibros != null) {
-			panelBusquedaLibros.actualizarTabla();
+		if (tablaLibros != null) {
+			tablaLibros.actualizarTabla(estante.getMatriz());
 		}
 	}
 

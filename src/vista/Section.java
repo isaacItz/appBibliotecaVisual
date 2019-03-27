@@ -48,6 +48,7 @@ import modelo.Grupo;
 import modelo.Utileria;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.Dimension;
 
 public class Section extends JPanel {
 	/**
@@ -78,6 +79,8 @@ public class Section extends JPanel {
 	private CodigosPostales codigosPostales;
 	private DefaultListModel<String> modeloLista;
 	private JList<String> listColonias;
+	private JList<String> listAlumnos;
+	private DefaultListModel<String> modelAlumns;
 	private Grupo grupo;
 
 	/**
@@ -91,6 +94,9 @@ public class Section extends JPanel {
 		uti = new Utileria();
 		opciones = new String[] { "--Seleccionar--", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" };
 		setLayout(new BorderLayout(0, 0));
+
+		modelAlumns = new DefaultListModel<>();
+		listAlumnos = new JList<>(modelAlumns);
 
 		JPanel panelTitulo = new JPanel();
 		panelTitulo.setForeground(Color.WHITE);
@@ -144,7 +150,7 @@ public class Section extends JPanel {
 					a.setPaterno(editPaterno.getText());
 					a.setNombre(editNombre.getText());
 					a.setSemestre(Integer.parseInt(comboBoxSemestre.getSelectedItem().toString()));
-
+					modelAlumns.addElement(a.getNoControl().concat(" ").concat(a.getNombreCompleto()));
 					grupo.agregar(a);
 					escribir("Alumno Registrado");
 
@@ -170,14 +176,14 @@ public class Section extends JPanel {
 
 		JPanel panelDatos = new JPanel();
 		add(panelDatos, BorderLayout.CENTER);
-		panelDatos.setLayout(new GridLayout(0, 2, 0, 20));
+		panelDatos.setLayout(new GridLayout(0, 3, 0, 20));
 
 		JPanel panelEscolares = new JPanel();
 		panelEscolares.setBackground(Color.GRAY);
 		panelEscolares.setBorder(
 				new TitledBorder(null, "Datos Escolares", TitledBorder.LEADING, TitledBorder.TOP, null, Color.BLUE));
 		panelDatos.add(panelEscolares);
-		panelEscolares.setLayout(new GridLayout(9, 2, 0, 10));
+		panelEscolares.setLayout(new GridLayout(9, 2, 10, 10));
 
 		JLabel lblNoControl = new JLabel("Ingrese el numero de control:");
 		lblNoControl.setForeground(Color.BLACK);
@@ -378,7 +384,7 @@ public class Section extends JPanel {
 		panelPersonales.setBorder(
 				new TitledBorder(null, "Datos Personales", TitledBorder.LEADING, TitledBorder.TOP, null, Color.BLUE));
 		panelDatos.add(panelPersonales);
-		panelPersonales.setLayout(new GridLayout(6, 2, 0, 10));
+		panelPersonales.setLayout(new GridLayout(6, 2, 10, 20));
 
 		JLabel lblCalle = new JLabel("Ingrese el nombre de la calle:");
 		lblCalle.setForeground(Color.BLACK);
@@ -386,6 +392,7 @@ public class Section extends JPanel {
 		panelPersonales.add(lblCalle);
 
 		editCalle = new JTextField();
+		editCalle.setMinimumSize(new Dimension(60, 100));
 		hacerMayuscula(editCalle);
 		editCalle.addActionListener(new ActionListener() {
 
@@ -410,6 +417,7 @@ public class Section extends JPanel {
 		panelPersonales.add(lblNumCasa);
 
 		editNumCasa = new JTextField();
+		editNumCasa.setMinimumSize(new Dimension(60, 100));
 		editNumCasa.addActionListener(new ActionListener() {
 
 			@Override
@@ -437,6 +445,7 @@ public class Section extends JPanel {
 		panelPersonales.add(lblCP);
 
 		editCP = new JTextField();
+		editCP.setMinimumSize(new Dimension(60, 100));
 		RestrictedTextField rs = new RestrictedTextField(editCP);
 		rs.setLimit(5);
 		rs.setOnlyNums(true);
@@ -481,6 +490,7 @@ public class Section extends JPanel {
 
 		modeloLista = new DefaultListModel<>();
 		listColonias = new JList<>(modeloLista);
+		listColonias.setMinimumSize(new Dimension(60, 100));
 		listColonias.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		editColonia.setViewportView(listColonias);
 
@@ -490,6 +500,7 @@ public class Section extends JPanel {
 		panelPersonales.add(lblEstado);
 
 		editEstado = new JTextField();
+		editEstado.setMinimumSize(new Dimension(60, 100));
 		editEstado.setEditable(false);
 		editEstado.addActionListener(new ActionListener() {
 
@@ -512,6 +523,7 @@ public class Section extends JPanel {
 		panelPersonales.add(lblMunicipio);
 
 		editMunicipio = new JTextField();
+		editMunicipio.setMinimumSize(new Dimension(60, 100));
 		editMunicipio.setEditable(false);
 		editMunicipio.addActionListener(new ActionListener() {
 
@@ -527,6 +539,19 @@ public class Section extends JPanel {
 		});
 		editMunicipio.setColumns(10);
 		panelPersonales.add(editMunicipio);
+
+		JPanel panel = new JPanel();
+		panelDatos.add(panel);
+		panel.setLayout(new BorderLayout(0, 0));
+
+		JPanel panel_1 = new JPanel();
+		panel_1.setBorder(new TitledBorder(null, "Ultimos Alumnos Registrados:", TitledBorder.LEADING, TitledBorder.TOP,
+				null, null));
+		panel.add(panel_1);
+		panel_1.setLayout(new BorderLayout(0, 0));
+
+		JScrollPane scrollPane = new JScrollPane(listAlumnos);
+		panel_1.add(scrollPane);
 
 	}
 
